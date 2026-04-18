@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-mono: 'Courier New', Courier, monospace;
+
+  --color-app-bg: var(--theme-bg);
+  --color-app-surface: var(--theme-surface);
+  --color-app-surface-alt: var(--theme-surface-alt);
+  --color-app-border: var(--theme-border);
+  --color-app-accent: var(--theme-accent);
+  --color-app-accent-light: var(--theme-accent-light);
+  --color-app-success: var(--theme-success);
+  --color-app-success-dark: var(--theme-success-dark);
+  --color-app-code: var(--theme-code);
+  --color-app-muted: var(--theme-muted);
+  --color-app-text: var(--theme-text);
+  --color-app-text-inv: var(--theme-text-inv);
+  --color-app-code-out: var(--theme-code-out);
+}
+
+:root {
+  --theme-bg: #0D0E10;
+  --theme-surface: #16181D;
+  --theme-surface-alt: #16181D;
+  --theme-border: #2D3139;
+  --theme-accent: #4CC9F0;
+  --theme-accent-light: #4CC9F0;
+  --theme-success: #4CC9F0;
+  --theme-success-dark: #0D0E10;
+  --theme-code: #16181D;
+  --theme-muted: #8E95A2;
+  --theme-text: #E2E4E9;
+  --theme-text-inv: #16181D;
+  --theme-code-out: #9CDCFE;
+}
+
+:root.light {
+  --theme-bg: #F8FAFC;
+  --theme-surface: #FFFFFF;
+  --theme-surface-alt: #F1F5F9;
+  --theme-border: #E2E8F0;
+  --theme-accent: #0284C7;
+  --theme-accent-light: #0EA5E9;
+  --theme-success: #0284C7;
+  --theme-success-dark: #FFFFFF;
+  --theme-code: #F8FAFC;
+  --theme-muted: #64748B;
+  --theme-text: #0F172A;
+  --theme-text-inv: #FFFFFF;
+  --theme-code-out: #0369A1;
+}
+
+body {
+  background-color: var(--color-app-bg);
+  color: var(--color-app-text);
+  font-family: var(--font-sans);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(120px) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}

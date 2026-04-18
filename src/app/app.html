@@ -1,0 +1,156 @@
+@if (toastVisible()) {
+  <div class="fixed top-6 right-6 bg-app-success text-app-success-dark px-5 py-3 rounded-lg text-[13px] font-bold shadow-[0_8px_24px_rgba(52,211,153,0.35)] z-[100] animate-[slideIn_0.25s_cubic-bezier(0.34,1.56,0.64,1)]">
+    ✓ Copiado al portapapeles
+  </div>
+}
+
+<div class="max-w-[1440px] mx-auto p-6 min-h-screen">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-6 pb-5 border-b border-app-border">
+     <div class="flex items-center gap-3.5">
+       <div class="font-[800] text-[1.2rem] tracking-[2px] text-app-accent">SNIPPET GENERATOR</div>
+       <div>
+          <div class="text-[12px] uppercase tracking-[1px] text-app-muted mt-0.5 m-0 flex gap-5 items-center">
+             <button (click)="toggleTheme()" type="button" class="cursor-pointer ml-2 p-1.5 rounded hover:bg-app-border/50 text-app-accent flex items-center justify-center transition-colors border border-transparent hover:border-app-border">
+               <span class="material-icons text-[16px] leading-none">{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</span>
+             </button>
+          </div>
+       </div>
+     </div>
+  </div>
+
+  <!-- Options -->
+  <div class="bg-app-surface border border-app-border rounded p-4 flex gap-6 flex-wrap items-center mb-5">
+     <span class="text-[11px] uppercase tracking-wider text-app-muted font-bold">Opciones</span>
+
+     <label class="flex items-center gap-2 cursor-pointer group select-none">
+        <div class="relative w-[18px] h-[18px]">
+           <input type="checkbox" class="peer sr-only" [checked]="removeExport()" (change)="toggleSignal(removeExport)">
+           <div class="absolute inset-0 border-2 border-app-border rounded bg-app-surface-alt transition-colors peer-checked:bg-app-accent peer-checked:border-app-accent flex items-center justify-center">
+             <svg class="w-2.5 h-2.5 text-white opacity-0 peer-checked:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+           </div>
+        </div>
+        <span class="text-[13px] text-app-text group-hover:text-app-accent transition-colors">Remover <code class="font-mono bg-app-surface border border-app-border px-1.5 py-[1px] rounded text-[12px] text-app-accent-light">export</code></span>
+     </label>
+
+     <label class="flex items-center gap-2 cursor-pointer group select-none">
+        <div class="relative w-[18px] h-[18px]">
+           <input type="checkbox" class="peer sr-only" [checked]="escapeSpecial()" (change)="toggleSignal(escapeSpecial)">
+           <div class="absolute inset-0 border-2 border-app-border rounded bg-app-surface-alt transition-colors peer-checked:bg-app-accent peer-checked:border-app-accent flex items-center justify-center">
+             <svg class="w-2.5 h-2.5 text-white opacity-0 peer-checked:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+           </div>
+        </div>
+        <span class="text-[13px] text-app-text group-hover:text-app-accent transition-colors">Escapar <code class="font-mono bg-app-surface border border-app-border px-1.5 py-[1px] rounded text-[12px] text-app-accent-light">\</code> <code class="font-mono bg-app-surface border border-app-border px-1.5 py-[1px] rounded text-[12px] text-app-accent-light">$</code></span>
+     </label>
+
+     <label class="flex items-center gap-2 cursor-pointer group select-none">
+        <div class="relative w-[18px] h-[18px]">
+           <input type="checkbox" class="peer sr-only" [checked]="replaceQuotes()" (change)="toggleSignal(replaceQuotes)">
+           <div class="absolute inset-0 border-2 border-app-border rounded bg-app-surface-alt transition-colors peer-checked:bg-app-accent peer-checked:border-app-accent flex items-center justify-center">
+             <svg class="w-2.5 h-2.5 text-white opacity-0 peer-checked:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+           </div>
+        </div>
+        <span class="text-[13px] text-app-text group-hover:text-app-accent transition-colors">Convertir <code class="font-mono bg-app-surface border border-app-border px-1.5 py-[1px] rounded text-[12px] text-app-accent-light">"</code> a <code class="font-mono bg-app-surface border border-app-border px-1.5 py-[1px] rounded text-[12px] text-app-accent-light">'</code></span>
+     </label>
+
+     <label class="flex items-center gap-2 cursor-pointer group select-none ml-auto lg:border-l lg:border-app-border lg:pl-6">
+        <div class="relative w-[18px] h-[18px]">
+           <input type="checkbox" class="peer sr-only" [checked]="wrapJson()" (change)="toggleSignal(wrapJson)">
+           <div class="absolute inset-0 border-2 border-app-success rounded bg-app-surface-alt transition-colors peer-checked:bg-app-success peer-checked:border-app-success flex items-center justify-center">
+             <svg class="w-2.5 h-2.5 text-app-success-dark opacity-0 peer-checked:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+           </div>
+        </div>
+        <span class="text-[13px] text-app-success font-semibold">Formato Snippet Completo (JSON)</span>
+     </label>
+  </div>
+
+  <!-- JSON Format Extra Options -->
+  @if (wrapJson()) {
+    <div class="bg-app-surface border border-app-border rounded p-4 flex gap-4 flex-wrap items-center mb-5 fade-in">
+      <div class="flex-1 min-w-[200px]">
+        <label for="input-name" class="block text-[11px] uppercase tracking-wider text-app-muted font-bold mb-1.5">Nombre del Snippet</label>
+        <input id="input-name" type="text" [value]="snippetName()" (input)="updateStringSignal(snippetName, $event)" placeholder="Ej. Console Log" class="w-full bg-app-surface border border-app-border rounded p-3 font-mono text-[14px] text-app-text focus:outline-none focus:border-app-accent transition-colors">
+      </div>
+      <div class="flex-1 min-w-[200px]">
+        <label for="input-prefix" class="block text-[11px] uppercase tracking-wider text-app-muted font-bold mb-1.5">Trigger / Prefix</label>
+        <input id="input-prefix" type="text" [value]="snippetPrefix()" (input)="updateStringSignal(snippetPrefix, $event)" placeholder="Ej. clg" class="w-full bg-app-surface border border-app-border rounded p-3 font-mono text-[14px] text-app-text focus:outline-none focus:border-app-accent transition-colors">
+      </div>
+      <div class="flex-[2] min-w-[300px]">
+        <label for="input-desc" class="block text-[11px] uppercase tracking-wider text-app-muted font-bold mb-1.5">Descripción</label>
+        <input id="input-desc" type="text" [value]="snippetDesc()" (input)="updateStringSignal(snippetDesc, $event)" placeholder="Breve descripción del snippet" class="w-full bg-app-surface border border-app-border rounded p-3 font-mono text-[14px] text-app-text focus:outline-none focus:border-app-accent transition-colors">
+      </div>
+    </div>
+  }
+
+  <!-- Grid Textareas -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+     <div class="flex flex-col gap-2.5">
+        <div class="flex justify-between items-center px-0.5">
+           <div class="flex items-center gap-2 text-[13px] font-bold text-app-muted uppercase tracking-[0.8px]">
+              <div class="w-2 h-2 rounded-full bg-app-accent"></div>
+              Código Original
+           </div>
+           <button (click)="clearInput()" class="px-6 py-3 rounded text-[12px] font-bold tracking-wide uppercase bg-app-surface text-app-muted border border-app-border hover:text-app-text hover:border-app-muted transition-all cursor-pointer">Limpiar</button>
+        </div>
+        <textarea [value]="rawCode()" (input)="updateRawCode($event)" placeholder="Pega aquí tu código JavaScript/TypeScript/HTML..." class="w-full h-[540px] p-6 border border-app-border rounded font-mono text-[14px] leading-relaxed bg-app-surface text-app-text focus:outline-none focus:border-app-accent focus:ring-1 focus:ring-app-accent transition-all resize-y placeholder:text-app-muted/50"></textarea>
+     </div>
+     <div class="flex flex-col gap-2.5">
+         <div class="flex justify-between items-center px-0.5">
+           <div class="flex items-center gap-2 text-[13px] font-bold text-app-muted uppercase tracking-[0.8px]">
+              <div class="w-2 h-2 rounded-full bg-app-success"></div>
+              Snippet VS Code
+           </div>
+           <div class="flex items-center gap-2">
+             <span class="text-[11px] text-app-muted mr-2 hidden md:inline-block">CTRL + C</span>
+             <button (click)="copyToClipboard()" class="px-6 py-3 rounded text-[12px] font-bold tracking-wide uppercase bg-app-accent text-app-success-dark hover:opacity-90 active:translate-y-[1px] transition-all flex items-center gap-1.5 cursor-pointer border-none">
+               Copiar Snippet
+             </button>
+           </div>
+        </div>
+        <textarea readonly [value]="outputCode()" placeholder="El snippet convertido aparecerá aquí..." class="w-full h-[540px] p-6 border border-app-border rounded font-mono text-[14px] leading-[1.5] bg-app-surface text-app-code-out focus:outline-none focus:border-app-accent transition-all resize-none placeholder:text-app-muted/50"></textarea>
+     </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="flex mt-2 bg-app-surface border border-app-border rounded overflow-hidden divide-x divide-app-border">
+     <div class="flex-1 py-3 px-5 flex items-center justify-between">
+        <span class="text-[11px] text-app-muted uppercase tracking-[0.8px] font-bold">Líneas</span>
+        <span class="text-base font-bold text-app-accent-light font-mono">{{ lineCount() }}</span>
+     </div>
+     <div class="flex-1 py-3 px-5 flex items-center justify-between">
+        <span class="text-[11px] text-app-muted uppercase tracking-[0.8px] font-bold">Caracteres</span>
+        <span class="text-base font-bold text-app-accent-light font-mono">{{ charCount() }}</span>
+     </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="mt-2 bg-app-surface border border-app-border rounded p-4 flex flex-wrap gap-5 items-center">
+     <span class="text-[11px] uppercase tracking-[0.8px] text-app-muted font-bold">Escapes Activos</span>
+     @if (escapeSpecial()) {
+       <div class="flex items-center gap-2 font-mono text-[12px]">
+          <span class="text-red-400 bg-red-400/10 px-1.5 py-0.5 rounded">\</span>
+          <span class="text-app-muted font-sans text-xs">→</span>
+          <span class="text-green-300 bg-green-300/10 px-1.5 py-0.5 rounded">\\</span>
+       </div>
+       <div class="flex items-center gap-2 font-mono text-[12px]">
+          <span class="text-red-400 bg-red-400/10 px-1.5 py-0.5 rounded">$&#123;</span>
+          <span class="text-app-muted font-sans text-xs">→</span>
+          <span class="text-green-300 bg-green-300/10 px-1.5 py-0.5 rounded">\\$&#123;</span>
+       </div>
+     }
+     @if (replaceQuotes()) {
+       <div class="flex items-center gap-2 font-mono text-[12px]">
+          <span class="text-red-400 bg-red-400/10 px-1.5 py-0.5 rounded">"</span>
+          <span class="text-app-muted font-sans text-xs">→</span>
+          <span class="text-green-300 bg-green-300/10 px-1.5 py-0.5 rounded">'</span>
+       </div>
+     } @else {
+       <div class="flex items-center gap-2 font-mono text-[12px]">
+          <span class="text-red-400 bg-red-400/10 px-1.5 py-0.5 rounded">"</span>
+          <span class="text-app-muted font-sans text-xs">→</span>
+          <span class="text-green-300 bg-green-300/10 px-1.5 py-0.5 rounded">\"</span>
+       </div>
+     }
+  </div>
+
+</div>
