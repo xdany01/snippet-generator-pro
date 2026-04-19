@@ -3,8 +3,8 @@
     "version": "1.0.0",
     "scripts": {
         "ng": "ng",
-        "start": "ng serve",
-        "build": "ng build",
+        "start": "ng serve -o",
+        "build": "ng build --configuration production",
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
         "lint": "ng lint",
@@ -32,6 +32,7 @@
         "@angular/build": "^21.0.0",
         "@angular/cli": "^21.0.0",
         "@angular/compiler-cli": "^21.0.0",
+        "@netlify/angular-runtime": "^2.2.0",
         "@tailwindcss/postcss": "^4.1.12",
         "@types/express": "^5.0.1",
         "@types/node": "^20.17.19",
